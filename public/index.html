@@ -1,0 +1,62 @@
+<html>
+<head>
+  <title>SMS WALL</title>
+<script src="/jquery.min.js"></script>
+<script src="/pubnub-3.3.min.js"></script>
+<script>
+$(function(){
+    // ----------------------------------
+    // INIT PUBNUB
+    // ----------------------------------
+    var pubnub = PUBNUB({
+        subscribe_key : 'sub-c0d46bfa-244b-11e1-abc7-674a42095d34',
+        ssl           : false,
+        origin        : 'pubsub.pubnub.com'
+    });
+
+    // ----------------------------------
+    // LISTEN FOR MESSAGES
+    // ----------------------------------
+    pubnub.subscribe({
+        restore  : true,
+        channel  : 'sms_wall',
+        callback : function(message) {
+          console.log(message);
+          $("#messages").prepend("<div class='message clearfix'><img src='bulb.png'><div class='text'><div class='from'>From: " + message["FromCity"] + "</div><div class='body'>" + message["Body"] + "</div></div></div>");
+        },
+        disconnect : function() {
+            // console.log("Connection Lost");
+        }
+    });
+
+});
+</script>
+<style>
+  body { margin: 0; font-family: sans-serif; color: #222; }
+  header { border-bottom: 1px solid #ddd; box-shadow: 0 6px 6px rgba(0,0,0,.1); }
+  h1 { margin: 1em; padding: 0; font-weight: normal; text-align: center; font-size: 24px; color: #999; }
+  h2 { margin: .5em; padding: 0; text-align: center; font-size: 48px; }
+  #messages { overflow-y: scroll; height: 460px; }
+  .message:first-child { padding-top: 18px; }
+  .message { font-size: 32px; margin-bottom: 16px; color: #222; padding: 6px 24px 18px; border-bottom: 1px solid #ddd; }
+  .message img { float: left; display: block; width: 36px; height: auto; }
+  .text { margin-left: 60px; }
+  .from { font-size: 18px; color: #666; margin-bottom: 6px; }
+  .clearfix:before, .clearfix:after { display: table; content: " "; }
+  .clearfix:after { clear: both; }
+  .clearfix { *zoom: 1; }
+</style>
+</head>
+<body>
+  <header>
+  <h1>PUT TITLE HERE</h1>
+  <h2>Send a text to PUT TWILIO NUMBER HERE</h2>
+  </header>
+  <section id="messages">
+
+  </section>
+  <footer style='font-size:10px;position:absolute;bottom:5px;right:20px;height:12px;text-align:right;width:100%'>
+  &copy; 2013 Corey Haines
+  </footer>
+</body>
+</html>
